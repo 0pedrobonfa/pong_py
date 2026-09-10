@@ -25,14 +25,18 @@ field_limit = pygame.Rect(0,0,WINDOW_width,WINDOW_height)
 ball = pygame.Rect(WINDOW_width/2,WINDOW_height/2,25,25)
 
 p1 = pygame.Rect(1110,260,25,100)
+p1_score = 0
 
 p2 = pygame.Rect(110,260,25,100)
+p2_score = 0
 
 mid_line = pygame.Rect(WINDOW_width/2,0,1,720)
 
+font = pygame.font.Font(None, size=60)
+
 
 # PYSHICS
-SPEED = 5
+SPEED = 20
 SPEED_y = 1
 
 BALL_MOVE_X = SPEED
@@ -88,11 +92,11 @@ while running_game:
 
     if p1.top <= 5:
         p1.top = 5
-    if p1.bottom >= WINDOW_height-5:
-        p1.bottom = WINDOW_height-5
+    if p1.bottom >= WINDOW_height-10:
+        p1.bottom = WINDOW_height-10
 
-    if p2.top <= 0:
-        p2.top = 0
+    if p2.top <= 5:
+        p2.top = 5
     if p2.bottom >= WINDOW_height-5:
         p2.bottom = WINDOW_height-5
 
@@ -114,18 +118,27 @@ while running_game:
         # ball_sound.play()
         BALL_MOVE_Y = BALL_MOVE_Y * -1
 
-    elif ball.left < 5 or ball.right>WINDOW_width:
+    elif ball.left < 5:
 #         ball_sound.play()
         BALL_MOVE_X = BALL_MOVE_X * -1
+        p1_score +=1
+    elif ball.right > WINDOW_width-5:
+#         ball_sound.play()
+        BALL_MOVE_X = BALL_MOVE_X * -1
+        p2_score += 1
 
+#   PLAYER x BALL COLLISIONS
     if p1.colliderect(ball):
-        BALL_MOVE_X *= -1
+        BALL_MOVE_X = -BALL_MOVE_X
 #         ball_sound.play()
 
     if p2.colliderect(ball):
-        BALL_MOVE_X *= -1
+        BALL_MOVE_X = -BALL_MOVE_X
+        SPEED = SPEED_y * 1.5
 #         ball_sound.play()
 
+    if p1_score >= 10 or p2_score >= 10:
+        running_game = False
 
     screen.fill("black")
 
@@ -136,6 +149,12 @@ while running_game:
     pygame.draw.rect(screen, "white", ball,0,50)
     pygame.draw.rect(screen, "green",p1)
     pygame.draw.rect(screen, "yellow",p2)
+
+    p1_score_text = font.render(f"{p1_score}",True,(0,255,0))
+    screen.blit(p1_score_text, (300,100))
+
+    p2_score_text = font.render(f"{p2_score}",True,(255,255,0))
+    screen.blit(p2_score_text, (WINDOW_width-300,100))
 
     # flip() the display to put your work on screen
     pygame.display.flip()
