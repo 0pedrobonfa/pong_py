@@ -8,6 +8,11 @@ WINDOW_height = 720
 
 # pygame setup
 pygame.init()
+# pygame.mixer.init()
+# pygame.mixer.music.load("soundtrack.mp3")
+# pygame.mixer.music.set_volume(0.2)
+# pygame.mixer.music.play(-1)
+# ball_sound = pygame.mixer.Sound("pong.mp3")
 
 # Inicializa variaveis do game
 screen = pygame.display.set_mode((WINDOW_width, WINDOW_height))
@@ -26,10 +31,8 @@ p2 = pygame.Rect(110,260,25,100)
 mid_line = pygame.Rect(WINDOW_width/2,0,1,720)
 
 
-
-
 # PYSHICS
-SPEED = 20
+SPEED = 5
 SPEED_y = 1
 
 BALL_MOVE_X = SPEED
@@ -47,7 +50,7 @@ p2_moving_down = False
 
 while running_game:
 
-    delta = clock.tick(60) /1000
+    delta = clock.tick (60) /1000
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -107,17 +110,21 @@ while running_game:
     # BALL PHYSICS
     ball.move_ip(BALL_MOVE_X, BALL_MOVE_Y)
 
-    if ball.top < 0 or ball.bottom >= WINDOW_height:
+    if ball.top < 5 or ball.bottom >= WINDOW_height:
+        # ball_sound.play()
         BALL_MOVE_Y = BALL_MOVE_Y * -1
 
-    elif ball.left < 0 or ball.right>WINDOW_width:
+    elif ball.left < 5 or ball.right>WINDOW_width:
+#         ball_sound.play()
         BALL_MOVE_X = BALL_MOVE_X * -1
 
     if p1.colliderect(ball):
         BALL_MOVE_X *= -1
+#         ball_sound.play()
 
     if p2.colliderect(ball):
         BALL_MOVE_X *= -1
+#         ball_sound.play()
 
 
     screen.fill("black")
